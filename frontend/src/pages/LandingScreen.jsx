@@ -1,18 +1,11 @@
-
-
-
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Footer from '../Layout/Footer';
-import backgroundImage from "../assets/background.webp";
+import backgroundImage from '../assets/background.webp';
 
 const LandingScreen = () => {
   return (
     <>
-
-
-
-
       <Helmet>
         <title>Vacation Rentals | Home</title>
       </Helmet>
@@ -20,9 +13,9 @@ const LandingScreen = () => {
         className="hero min-h-screen w-full absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundPosition: 'center', // Centers the image
-          backgroundSize: 'cover', // Covers the entire width
-          backgroundRepeat: 'no-repeat', // Prevents repeating the image
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div className="hero-overlay bg-opacity-60"></div>
@@ -41,11 +34,9 @@ const LandingScreen = () => {
         </div>
       </div>
 
-<div className="z-10 footer">
-
-      <Footer />
-
-</div>
+      <div className="z-10 footer">
+        <Footer />
+      </div>
     </>
   );
 };

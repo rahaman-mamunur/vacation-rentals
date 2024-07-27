@@ -1,15 +1,15 @@
-import Spinner from "../components/Spinner";
+import Spinner from '../components/Spinner';
 import useAdmin from '../hook/useAdmin';
-import useAuth from "../hook/useAuth";
+import useAuth from '../hook/useAuth';
 
 const Try = () => {
-  const { user, loading: authLoading } = useAuth(); 
-  const [isAuth, isAuthLoading] = useAdmin(); 
+  const { user, loading: authLoading } = useAuth();
+  const [isAuth, isAuthLoading] = useAdmin();
 
   const handler = () => {
     console.log('user data', user);
     console.log('user loading', authLoading);
-    console.log('admin data', isAuth?.isAdmin); 
+    console.log('admin data', isAuth?.isAdmin);
     console.log('admin loading', isAuthLoading);
   };
 

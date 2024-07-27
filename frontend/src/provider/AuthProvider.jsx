@@ -6,26 +6,19 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile
+  updateProfile,
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
-
-
 
 import { app } from '../firebase/firebase.config';
 
 export const AuthContext = createContext(null);
-const auth =getAuth(app); 
-
-
-
-
+const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setloading] = useState(true);
-const googleProvider = new GoogleAuthProvider();
-
+  const googleProvider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
     setloading(true);
@@ -42,43 +35,32 @@ const googleProvider = new GoogleAuthProvider();
     return signOut(auth);
   };
 
-  const gooleSignIn = ()=>{
-    setloading(true); 
-    return signInWithPopup(auth , googleProvider); 
-  }
+  const gooleSignIn = () => {
+    setloading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
+  // update profile
 
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
 
-  // update profile 
+  //
 
-  const updateUserProfile = (name , photo)=>{
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setloading(false);
+      setUser(currentUser);
+    });
 
-    return updateProfile(auth.currentUser , {
-      displayName : name, 
-      photoURL : photo,
-    })
-  }
-
-
-
-
-
-  // 
-
-    useEffect(()=>{
-
-        const unsubscribe = onAuthStateChanged(auth , (currentUser)=>{
-            // console.log('user name of authprovider  ' , currentUser)
-            // console.log('oauth state changed ')
-            setloading(false); 
-            setUser(currentUser); 
-            // console.log('loading state of auth state changed ' , loading)
-        })  
-
-        return ()=>{
-           return unsubscribe()
-        }
-    } , [loading])
+    return () => {
+      return unsubscribe();
+    };
+  }, [loading]);
 
   const authInfo = {
     user,
@@ -87,8 +69,7 @@ const googleProvider = new GoogleAuthProvider();
     logOut,
     loading,
     updateUserProfile,
-    gooleSignIn
-    
+    gooleSignIn,
   };
 
   return (

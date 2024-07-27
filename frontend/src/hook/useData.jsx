@@ -1,7 +1,6 @@
-import { useContext } from "react";
-import { DataContext } from "../provider/DataProvider";
+import { useContext } from 'react';
+import { DataContext } from '../provider/DataProvider';
 
-const useData =()=> useContext(DataContext)
+const useData = () => useContext(DataContext);
 
-   
-export default useData; 
+export default useData;

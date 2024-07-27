@@ -8,15 +8,10 @@ const bookingcancelSchema = mongoose.Schema(
       required: true,
     },
 
-    user : {
-      type : mongoose.Schema.Types.ObjectId,
-      ref :  'User'
-
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
-    // userId: {
-    //   type: String,
-    //   required: true,
-    // },
 
     bookingInfo: {
       type: mongoose.Schema.Types.ObjectId,

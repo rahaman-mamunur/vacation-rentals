@@ -1,21 +1,17 @@
-const capitalizeName = (name )=>{
+const capitalizeName = (name) => {
+  if (!name || typeof name !== 'string') {
+    return '';
+  }
 
-    if (!name || typeof name !== 'string') {
-        return ''; 
-    }
+  const splittedName = name.split(' ');
 
+  const modifiedName = splittedName
+    .map((item, index) => {
+      return item.charAt(0).toUpperCase() + splittedName[index].slice(1);
+    })
+    .join(' ');
 
-    const splittedName = name.split(' ')
+  return modifiedName;
+};
 
-    const modifiedName = splittedName.map((item,index)=>{
-
-
-        return item.charAt(0).toUpperCase() + splittedName[index].slice(1); 
-    }).join(' ')
-
-    return modifiedName; 
-
-
-}
-
-module.exports = capitalizeName ; 
+module.exports = capitalizeName;

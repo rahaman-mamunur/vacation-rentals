@@ -2,65 +2,60 @@ import { Tabs, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { MdDeleteOutline } from 'react-icons/md';
-import { useNavigate } from "react-router-dom";
-import BackButton from "../components/BackButton";
+import { useNavigate } from 'react-router-dom';
+import BackButton from '../components/BackButton';
 import Error from '../components/Error';
 import Spinner from '../components/Spinner';
 import useAxiosSecure from '../hook/useAxiosSecure';
 
-import { RiAdminFill } from "react-icons/ri";
+import { RiAdminFill } from 'react-icons/ri';
 import useAdmin from '../hook/useAdmin';
-import useAuth from "../hook/useAuth";
+import useAuth from '../hook/useAuth';
 import useData from '../hook/useData';
 
 const { TabPane } = Tabs;
-// const user = JSON.parse(localStorage.getItem('currentUser'));
-// console.log(user.name);
+
 function Adminscreen() {
   return (
     <>
-    <div className="max-w-screen-xl mx-auto">
-
-<div className="flex justify-between items-center p-5">
-   <div className=" flex-1 text-center ">
-   <h2 className="m-2 " style={{ fontSize: '35px' }}>
-        Admin Panel
-      </h2>
-   </div>
-    <BackButton to="/home"  />
-
-</div>
-
-  
-      <Tabs defaultActiveKey="1">
-        <TabPane tab="Bookings" key="1">
-          <div className="row">
-            <Bookings />
+      <div className="max-w-screen-xl mx-auto">
+        <div className="flex justify-between items-center p-5">
+          <div className=" flex-1 text-center ">
+            <h2 className="m-2 " style={{ fontSize: '35px' }}>
+              Admin Panel
+            </h2>
           </div>
-        </TabPane>
-        <TabPane tab="Rooms" key="2">
-          <div className="row">
-            <Rooms />
-          </div>
-        </TabPane>
-        <TabPane tab="Add Room" key="3">
-          <Addroom />
-        </TabPane>
-        <TabPane tab="Users" key="4">
-          <Users />
-        </TabPane>
-        <TabPane tab="Request Cancellation " key="5">
-          <CancellationReq />
-        </TabPane>
-        <TabPane tab="Admins " key="6">
-          <Admin />
-        </TabPane>
-        <TabPane tab="Reported Bookings " key="7">
-          <ReportedBooking />
-        </TabPane>
-      </Tabs>
-    </div>
-    
+          <BackButton to="/home" />
+        </div>
+
+        <Tabs defaultActiveKey="1">
+          <TabPane tab="Bookings" key="1">
+            <div className="row">
+              <Bookings />
+            </div>
+          </TabPane>
+          <TabPane tab="Rooms" key="2">
+            <div className="row">
+              <Rooms />
+            </div>
+          </TabPane>
+          <TabPane tab="Add Room" key="3">
+            <Addroom />
+          </TabPane>
+          <TabPane tab="Users" key="4">
+            <Users />
+          </TabPane>
+          <TabPane tab="Request Cancellation " key="5">
+            <CancellationReq />
+          </TabPane>
+          <TabPane tab="Admins " key="6">
+            <Admin />
+          </TabPane>
+          <TabPane tab="Reported Bookings " key="7">
+            <ReportedBooking />
+          </TabPane>
+        </Tabs>
+      </div>
     </>
   );
 }
@@ -73,15 +68,13 @@ export function Bookings() {
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate()
-  const {refetch} = useData(); 
-  const {user} = useAuth(); 
-
+  const navigate = useNavigate();
+  const { refetch } = useData();
+  const { user } = useAuth();
 
   useEffect(() => {
-
-    if(!user ){
-      return navigate('/login')
+    if (!user) {
+      return navigate('/login');
     }
 
     const fetchData = async () => {
@@ -105,79 +98,26 @@ export function Bookings() {
       }
     };
     fetchData();
-  }, [axiosSecure , navigate , user]);
+  }, [axiosSecure, navigate, user]);
 
-
-
-
-  // todo : completed 
-  const handleBookings = async (id)=>{
-
-    try {
-
-      setloading(true); 
-      
-      const res = await axiosSecure.delete(`/api/bookings/delete-bookings/${id}`)
-      // console.log(res);
-
-      if(res.status === 200){
-        message.success(res.data.message)
-        const result = await refetch.bookings(); 
-        setbookings(result); 
-      }else{
-        message.error('Failed to delete booking')
-      }
-  
-      setloading(false); 
-      
-    } catch (error) {
-      console.log(error); 
-      seterror(true); 
-      if (error.response.status === 400) {
-        setErrorMessage(error.response.data.message);
-      } else if (error.response.status === 404) {
-        navigate('/not-found');
-      }
-      
-      else if(error.response.status === 500) {
-        setErrorMessage(error.response.data.message)}
-
-      else {
-        setErrorMessage('Something went wrong !!!');
-      }
-      setloading(false); 
-    }
-
-
-  }
-
-
-
-
-
-  //todo completed 
-
-  const handleStatus = async (item) => {
-    // console.log('itesmmmmmmmmm', item);
+  // todo : completed
+  const handleBookings = async (id) => {
     try {
       setloading(true);
 
-      const res = await axiosSecure.patch(
-        `/api/bookings/booking-status/${item._id}`
+      const res = await axiosSecure.delete(
+        `/api/bookings/delete-bookings/${id}`
       );
-      // console.log(res.data);
-      if (
-        res.data.paymentStatus === 'received' &&
-        res.data.status === 'booked'
-      ) {
-        message.success('Payment Status Updated');
-        const result = await refetch.bookings(); 
-        setbookings(result); 
-      }else{
-        message.error('Payment failed !!!')
-      }
-      setloading(false);
 
+      if (res.status === 200) {
+        message.success(res.data.message);
+        const result = await refetch.bookings();
+        setbookings(result);
+      } else {
+        message.error('Failed to delete booking');
+      }
+
+      setloading(false);
     } catch (error) {
       console.log(error);
       seterror(true);
@@ -185,12 +125,45 @@ export function Bookings() {
         setErrorMessage(error.response.data.message);
       } else if (error.response.status === 404) {
         navigate('/not-found');
+      } else if (error.response.status === 500) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Something went wrong !!!');
       }
-      
-      else if(error.response.status === 500) {
-        setErrorMessage(error.response.data.message)}
+      setloading(false);
+    }
+  };
 
-      else {
+  //todo completed
+
+  const handleStatus = async (item) => {
+    try {
+      setloading(true);
+
+      const res = await axiosSecure.patch(
+        `/api/bookings/booking-status/${item._id}`
+      );
+      if (
+        res.data.paymentStatus === 'received' &&
+        res.data.status === 'booked'
+      ) {
+        message.success('Payment Status Updated');
+        const result = await refetch.bookings();
+        setbookings(result);
+      } else {
+        message.error('Payment failed !!!');
+      }
+      setloading(false);
+    } catch (error) {
+      console.log(error);
+      seterror(true);
+      if (error.response.status === 400) {
+        setErrorMessage(error.response.data.message);
+      } else if (error.response.status === 404) {
+        navigate('/not-found');
+      } else if (error.response.status === 500) {
+        setErrorMessage(error.response.data.message);
+      } else {
         setErrorMessage('Something went wrong !!!');
       }
       setloading(false);
@@ -205,7 +178,6 @@ export function Bookings() {
     return <Error error={errorMessage} />;
   }
 
-
   if (bookings.length === 0) {
     return (
       <div className="text-center mt-5">
@@ -214,7 +186,7 @@ export function Bookings() {
       </div>
     );
   }
-  
+
   return (
     <>
       <Helmet>
@@ -228,7 +200,7 @@ export function Bookings() {
             <tr>
               <th>#</th>
               <th>Booking Id</th>
-              <th>Customer</th> 
+              <th>Customer</th>
               <th>Room</th>
               <th>Check-in</th>
               <th>Check-out</th>
@@ -241,7 +213,7 @@ export function Bookings() {
             {bookings.map((booking, index) => {
               return (
                 <tr key={index}>
-                  <td>{index+1}</td>
+                  <td>{index + 1}</td>
                   <td>{booking._id}</td>
                   <td>{booking.email}</td>
                   <td>{booking.room}</td>
@@ -297,18 +269,15 @@ export function Rooms() {
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const {refetch} = useData(); 
-  const navigate = useNavigate()
-  const {user} = useAuth(); 
+  const { refetch } = useData();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-
-
-  //todo  completed 
+  //todo  completed
 
   useEffect(() => {
-
-    if(!user ){
-      return navigate('/login')
+    if (!user) {
+      return navigate('/login');
     }
 
     const fetchData = async () => {
@@ -317,7 +286,6 @@ export function Rooms() {
         const res = await axiosSecure.get('/api/rooms/getallrooms');
         setrooms(res.data);
         setloading(false);
-        // console.log(res.data);
       } catch (error) {
         console.log(error);
         seterror(true);
@@ -325,38 +293,28 @@ export function Rooms() {
           setErrorMessage(error.response.data.message);
         } else if (error.response.status === 404) {
           navigate('/not-found');
-        }
-        
-        else if(error.response.status === 500) {
-          setErrorMessage(error.response.data.message)}
-  
-        else {
+        } else if (error.response.status === 500) {
+          setErrorMessage(error.response.data.message);
+        } else {
           setErrorMessage('Something went wrong !!!');
         }
         setloading(false);
       }
     };
     fetchData();
-  }, [axiosSecure , navigate , user]);
+  }, [axiosSecure, navigate, user]);
 
-  // todo : refetch after deleted item
-
-
-
-  // todo compeleted 
-
+  // todo compeleted
 
   const handleRooms = async (id) => {
     try {
       setloading(true);
       await axiosSecure.delete(`/api/rooms/delete-rooms/${id}`);
-      // console.log(res.data);
       message.success(`Room  has been deleted successfully!`);
-      const result = await refetch.rooms(); 
-      setrooms(result); 
+      const result = await refetch.rooms();
+      setrooms(result);
       setloading(false);
     } catch (error) {
-      // console.log(error.response);
       seterror(true);
       if (error.response.status === 500) {
         setErrorMessage(error.response.data.message);
@@ -385,7 +343,6 @@ export function Rooms() {
       </div>
     );
   }
-  
 
   return (
     <>
@@ -412,7 +369,7 @@ export function Rooms() {
             {rooms.map((item, index) => {
               return (
                 <tr key={index}>
-                  <td>{index+1}</td>
+                  <td>{index + 1}</td>
                   <td>{item._id}</td>
                   <td>{item.name}</td>
                   <td>{item.type}</td>
@@ -439,9 +396,8 @@ export function Rooms() {
 
 //todo : add room
 
-const img_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY
-const img_hosting_api = `https://api.imgbb.com/1/upload?key=${img_hosting_key}`
-
+const img_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const img_hosting_api = `https://api.imgbb.com/1/upload?key=${img_hosting_key}`;
 
 export function Addroom() {
   const [room, setroom] = useState('');
@@ -450,28 +406,22 @@ export function Addroom() {
   const [description, setdescription] = useState('');
   const [phonenumber, setphonenumber] = useState('');
   const [type, settype] = useState('');
-  const [images , setimages] = useState(null);  // Changed from individual image states to a 
-  // const [imageUrls, setImageUrls] = useState([]); // State to hold the image URLs
+  const [images, setimages] = useState(null);
 
   const [loading, setloading] = useState(false);
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate()
-  const {user} = useAuth(); 
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-
-
-  useEffect(()=>{
-
-    if(!user ){
-      return navigate('/login')
+  useEffect(() => {
+    if (!user) {
+      return navigate('/login');
     }
-  } , [user , navigate])
+  }, [user, navigate]);
 
-
-
-  //todo completed 
+  //todo completed
 
   const addRoom = async (e) => {
     e.preventDefault();
@@ -479,65 +429,59 @@ export function Addroom() {
     if (!images) {
       return message.error('Please select images.');
     }
-  
+
     if (!room) {
       return message.error('Room is needed.');
     }
-  
+
     if (!rentperday) {
       return message.error('Rent per day is required.');
     }
-  
+
     if (!maxcount) {
       return message.error('Max count is required.');
     }
-  
+
     if (!description) {
       return message.error('Description is required.');
     }
-  
+
     if (!phonenumber) {
       return message.error('Location is required.');
     }
-    
+
     if (!type) {
       return message.error('Type is required.');
     }
 
-
     try {
       setloading(true);
 
-      // import to imgdb 
+      // import to imgdb
 
-      const uploadedImageUrls = []
+      const uploadedImageUrls = [];
 
-     for(let i=0 ; i<images.length ; i++){
-      const formData = new FormData(); 
-      formData.append('image' , images[i])
-      // console.log('form data value ' , formData)
+      for (let i = 0; i < images.length; i++) {
+        const formData = new FormData();
+        formData.append('image', images[i]);
 
-      // send to imgdb server 
+        // send to imgdb server
 
-      const imgBBRes = await axiosSecure.post(img_hosting_api , formData , {
+        const imgBBRes = await axiosSecure.post(img_hosting_api, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        });
 
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
+        if (imgBBRes.status === 200) {
+          uploadedImageUrls.push(imgBBRes.data.data.url);
+        } else {
+          message.error(`Failed to upload image ${i + 1}`);
+          return;
+        }
 
-     if(imgBBRes.status === 200){
-      uploadedImageUrls.push(imgBBRes.data.data.url); 
-     }else{
-      message.error(`Failed to upload image ${i+1}`)
-      return; 
-     }
-
-      // console.log( 'imgbbresss filesss ',imgBBRes); 
-
-     }
-
-    //  console.log('upload images url inside addroom' , uploadedImageUrls)
+        // console.log( 'imgbbresss filesss ',imgBBRes);
+      }
 
       const roomobj = {
         room,
@@ -546,21 +490,15 @@ export function Addroom() {
         description,
         phonenumber,
         type: type.trim(),
-        images:  uploadedImageUrls
-        // image1,
-        // image2,
-        // image3,
+        images: uploadedImageUrls,
       };
       const res = await axiosSecure.post('/api/rooms/addroom', roomobj);
 
-      if(res.status === 201){
-        message.success(res.data.message)
-
-      
-      }else{
-        message.error('Failed to add room')
+      if (res.status === 201) {
+        message.success(res.data.message);
+      } else {
+        message.error('Failed to add room');
       }
-
 
       setloading(false);
       setroom('');
@@ -569,27 +507,20 @@ export function Addroom() {
       setdescription('');
       setphonenumber('');
       settype('');
-      // setimage1('');
-      // setimage2('');
-      // setimage3('');
-      setimages(null); 
-      // console.log(res);
 
+      setimages(null);
     } catch (error) {
       console.log(error);
       seterror(true);
-      if (error.response  && error.response.status === 500) {
+      if (error.response && error.response.status === 500) {
         setErrorMessage(error.response.data.message);
-      } else if (error.response  && error.response.status === 404) {
+      } else if (error.response && error.response.status === 404) {
         navigate('/not-found');
       } else {
         setErrorMessage('Something went wrong !!!');
       }
       setloading(false);
     }
-
-    // Clear form fields
-  
   };
 
   if (loading) {
@@ -599,9 +530,6 @@ export function Addroom() {
   if (error && errorMessage) {
     return <Error error={errorMessage} />;
   }
-
-  
-  
 
   return (
     <>
@@ -655,40 +583,13 @@ export function Addroom() {
               value={type}
               onChange={(e) => settype(e.target.value)}
             />
-            {/* <input
-              type="text"
-              className="input"
-              placeholder="Image URL 1"
-              value={image1}
-              onChange={(e) => setimage1(e.target.value)}
-            />
+
             <input
-              type="text"
+              type="file"
               className="input"
-              placeholder="Image URL 2"
-              value={image2}
-              onChange={(e) => setimage2(e.target.value)}
+              multiple
+              onChange={(e) => setimages(e.target.files)}
             />
-            <input
-              type="text"
-              className="input"
-              placeholder="Image URL 3"
-              value={image3}
-              onChange={(e) => setimage3(e.target.value)}
-            /> */}
-
-          <input 
-          
-          type="file" 
-          className = "input"
-          multiple 
-          onChange = {(e) => setimages(e.target.files)}
-          
-          />
-
-
-
-
           </div>
 
           <button
@@ -703,7 +604,6 @@ export function Addroom() {
   );
 }
 
-
 // todo : for users
 
 export function Users() {
@@ -712,29 +612,23 @@ export function Users() {
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate()
-  const {refetch} = useData(); 
-  const [isAuth] = useAdmin(); 
-  const {user} = useAuth(); 
+  const navigate = useNavigate();
+  const { refetch } = useData();
+  const [isAuth] = useAdmin();
+  const { user } = useAuth();
 
-
-
-  //todo completed 
+  //todo completed
 
   useEffect(() => {
-
-    if(!user){
-      return navigate('/login')
+    if (!user) {
+      return navigate('/login');
     }
-
 
     const fetchData = async () => {
       try {
         setloading(true);
 
         const res = await axiosSecure.get('/api/users/getallusers');
-
-        
 
         setusers(res.data);
         setloading(false);
@@ -743,12 +637,9 @@ export function Users() {
         seterror(error);
         if (error.response.status === 500) {
           setErrorMessage(error.response.data.message);
-        } 
-       else if (error.response.status === 400) {
+        } else if (error.response.status === 400) {
           setErrorMessage(error.response.data.message);
-        } 
-        
-        else if (error.response.status === 404) {
+        } else if (error.response.status === 404) {
           navigate('/not-found');
         } else {
           setErrorMessage('Something went wrong !!!');
@@ -757,98 +648,71 @@ export function Users() {
       }
     };
     fetchData();
-  }, [axiosSecure , navigate , user]);
+  }, [axiosSecure, navigate, user]);
 
+  // todo completed
+  // delete user
 
-
-
-  // todo completed 
-  // delete user 
-
-  const handleUser = async(id)=>{
-
- 
-    if(isAuth && isAuth.isAdmin){
-
+  const handleUser = async (id) => {
+    if (isAuth && isAuth.isAdmin) {
       try {
-
-        setloading(true); 
-        const res = await axiosSecure.delete(`/api/users/delete-user/${id}`)
-        // console.log(res.data); 
-        if(res.status === 201){
-          message.success(res.data.message)
-          const result = await refetch.users(); 
-          setusers(result); 
-        }else{
-          message.error('Failed to user deleted ')
+        setloading(true);
+        const res = await axiosSecure.delete(`/api/users/delete-user/${id}`);
+        if (res.status === 201) {
+          message.success(res.data.message);
+          const result = await refetch.users();
+          setusers(result);
+        } else {
+          message.error('Failed to user deleted ');
         }
-        setloading(false); 
+        setloading(false);
       } catch (error) {
-        console.log(error); 
-        seterror(true); 
+        console.log(error);
+        seterror(true);
         if (error.response.status === 401) {
           setErrorMessage(error.response.data.message);
         } else if (error.response.status === 404) {
           navigate('/not-found');
-        }
-        
-        else if(error.response.status === 500) {
-          setErrorMessage(error.response.data.message)}
-  
-        else {
+        } else if (error.response.status === 500) {
+          setErrorMessage(error.response.data.message);
+        } else {
           setErrorMessage('Something went wrong !!!');
         }
-  
-        setloading(false); 
-      }
 
+        setloading(false);
+      }
     }
+  };
 
-  
+  // update admin acces
 
-  }
-
-
-  // update admin acces 
-
-  const handleAdminAccess = async(id)=>{
-
+  const handleAdminAccess = async (id) => {
     try {
-
-      setloading(true); 
-      const res = await axiosSecure.patch(`/api/users/admin-status/${id}`)
-      // console.log(res.data); 
-      if(res.status === 201){
-        message.success(res.data.message)
-        const result = await refetch.users()
-        setusers(result)
-       
-    
-      }else{
-        message.error('Failed to update !!')
+      setloading(true);
+      const res = await axiosSecure.patch(`/api/users/admin-status/${id}`);
+      if (res.status === 201) {
+        message.success(res.data.message);
+        const result = await refetch.users();
+        setusers(result);
+      } else {
+        message.error('Failed to update !!');
       }
-      setloading(false); 
-
+      setloading(false);
     } catch (error) {
-      console.log(error); 
-      seterror(true); 
+      console.log(error);
+      seterror(true);
       if (error.response.status === 401) {
         setErrorMessage(error.response.data.message);
       } else if (error.response.status === 404) {
         navigate('/not-found');
-      }
-      
-      else if(error.response.status === 500) {
-        setErrorMessage(error.response.data.message)}
-
-      else {
+      } else if (error.response.status === 500) {
+        setErrorMessage(error.response.data.message);
+      } else {
         setErrorMessage('Something went wrong !!!');
       }
-      setloading(false); 
+      setloading(false);
     }
-  }
-
-
+  };
 
   if (loading) {
     return <Spinner />;
@@ -858,8 +722,7 @@ export function Users() {
     return <Error error={errorMessage} />;
   }
 
-
-  if (users.length === 0 ) {
+  if (users.length === 0) {
     return (
       <div className="text-center mt-5">
         <h2>No users found</h2>
@@ -867,15 +730,11 @@ export function Users() {
       </div>
     );
   }
-  
 
-
-
-  let indexer =1; 
+  let indexer = 1;
 
   return (
     <>
-    {/* {JSON.stringify(users)} */}
       <Helmet>
         <title>Vacation Rentalsall | Admin </title>
       </Helmet>
@@ -895,45 +754,48 @@ export function Users() {
             </thead>
 
             <tbody>
-        {loading ? (<Spinner />) : ( users &&
+              {loading ? (
+                <Spinner />
+              ) : (
+                users &&
                 users.map((user, index) => {
-                  if(!user.isAdmin){
-             
+                  if (!user.isAdmin) {
                     return (
-                      <tr key={index+1}>
+                      <tr key={index + 1}>
                         <td>{indexer++}</td>
-                        <td>{ 
-                        user.name}</td>
+                        <td>{user.name}</td>
                         <td>{user.email}</td>
-                        <td ><b className={user.isAdmin ? 'text-red-400' : 'text-green-400'}>{user.isAdmin ? <RiAdminFill className="text-xl"/>: 
-                        
-                        
-                      <button className="btn btn-outline btn-error" onClick={()=> handleAdminAccess(user._id)}>Access</button>
-                        
-                        
-                        
-                        
-                        }</b></td>
                         <td>
-  
-                          <button className="btn btn-outline btn-error" onClick={()=> handleUser(user._id)}>
-  
-                          <MdDeleteOutline /> 
+                          <b
+                            className={
+                              user.isAdmin ? 'text-red-400' : 'text-green-400'
+                            }
+                          >
+                            {user.isAdmin ? (
+                              <RiAdminFill className="text-xl" />
+                            ) : (
+                              <button
+                                className="btn btn-outline btn-error"
+                                onClick={() => handleAdminAccess(user._id)}
+                              >
+                                Access
+                              </button>
+                            )}
+                          </b>
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-outline btn-error"
+                            onClick={() => handleUser(user._id)}
+                          >
+                            <MdDeleteOutline />
                           </button>
-  
-  
-  
                         </td>
                       </tr>
                     );
                   }
-
-
-
-
-                }))  }
-
-             
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -947,16 +809,14 @@ export const CancellationReq = () => {
   const [loading, setloading] = useState(false);
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
-  const {refetch} = useData(); 
-  const navigate = useNavigate(); 
+  const { refetch } = useData();
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
-  const {user} = useAuth(); 
-
-
+  const { user } = useAuth();
 
   useEffect(() => {
-    if(!user ){
-      return navigate('/login')
+    if (!user) {
+      return navigate('/login');
     }
     const fetchData = async () => {
       try {
@@ -965,7 +825,6 @@ export const CancellationReq = () => {
         const res = await axiosSecure.get(
           '/api/bookingCancel/reqofcancellation'
         );
-        // console.log('inside of req of cancellation using get method ' , res.data);
         setreqofcancellation(res.data);
         setloading(false);
       } catch (error) {
@@ -975,74 +834,58 @@ export const CancellationReq = () => {
       }
     };
     fetchData();
-  }, [axiosSecure , user ,navigate]);
+  }, [axiosSecure, user, navigate]);
 
   const handleCancelReq = async (item) => {
-
-    // console.log('handle cancelReq' , item); 
     try {
-      setloading(true)
+      setloading(true);
 
-      const res = await axiosSecure.post(`/api/bookingCancel/reqofcancellation-accepted` , {
+      const res = await axiosSecure.post(
+        `/api/bookingCancel/reqofcancellation-accepted`,
+        {
+          id: item._id,
+          bookingid: item.bookingid,
+          roomid: item.bookingInfo.roomid,
+        }
+      );
 
-        id : item._id,
-        bookingid : item.bookingid,
-        roomid : item.bookingInfo.roomid,
-
-      })
-
-      if(res.status === 201){
-        message.success(res.data); 
-        const result = await refetch.cancelreq(); 
-        setreqofcancellation(result); 
-
-      }else{
-        message.success('Something phissing !!!')
+      if (res.status === 201) {
+        message.success(res.data);
+        const result = await refetch.cancelreq();
+        setreqofcancellation(result);
+      } else {
+        message.success('Something phissing !!!');
       }
 
-      setloading(false); 
-
-      
-    } catch (error) {
-      console.log(error)
-      seterror(true); 
       setloading(false);
-      
-      if(error.response.status === 400){
-        message.error(error.response.data) 
-      }else if(error.response.status === 404){
-        navigate('/not-found')
-      }
-      else if(error.response.status === 701){
-        setErrorMessage(error.response.data.message)
-      }
-      
-      else if(error.response.status === 702){
-        setErrorMessage(error.response.data.message)
-      }
-      else if(error.response.status === 703){
-        setErrorMessage(error.response.data.message)
-      }
+    } catch (error) {
+      console.log(error);
+      seterror(true);
+      setloading(false);
 
-      
-      else{
-        setErrorMessage('Something went wrong')
+      if (error.response.status === 400) {
+        message.error(error.response.data);
+      } else if (error.response.status === 404) {
+        navigate('/not-found');
+      } else if (error.response.status === 701) {
+        setErrorMessage(error.response.data.message);
+      } else if (error.response.status === 702) {
+        setErrorMessage(error.response.data.message);
+      } else if (error.response.status === 703) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Something went wrong');
       }
     }
-
-
-
   };
 
-
-  if(loading){
-    return <Spinner />
+  if (loading) {
+    return <Spinner />;
   }
 
-  if(error && errorMessage){
-    return <Error error={errorMessage} />
+  if (error && errorMessage) {
+    return <Error error={errorMessage} />;
   }
-
 
   if (reqofcancellation.length === 0) {
     return (
@@ -1053,10 +896,8 @@ export const CancellationReq = () => {
     );
   }
 
-
   return (
     <>
-
       {loading ? (
         <Spinner />
       ) : (
@@ -1076,37 +917,95 @@ export const CancellationReq = () => {
           <tbody>
             {reqofcancellation.map((item, index) => (
               <tr key={index} className="text-center">
-
-                {item?.bookingInfo  ? ( <><td><b>{item?.bookingid}</b></td>
-             <td><b>{item?.bookingInfo?.userid }</b></td>
-                  <td><b>{item?.bookingInfo?.transactionId }</b></td>
-                  <td><b>{item?.bookingInfo?.fromdate }</b></td>
-                  <td><b className={item?.bookingInfo?.status === 'booked' ? 'text-green-500' : 'text-red-500'} >{item?.bookingInfo?.status }</b></td>
-                  <td className="text-center"><b className={item?.bookingInfo?.cancellationDeadline === 'Expired' ? 'text-red-500 ' : 'text-black' } >{item.bookingInfo.cancellationDeadline }</b></td>
-                  <td><b className={item?.bookingInfo?.paymentStatus === 'received' ? 'text-green-500' : 'text-red-400'} >{item?.bookingInfo?.paymentStatus }</b></td>
-                  <td>
-                    <button
-                      className="btn btn-outline btn-error"
-                      onClick={() => handleCancelReq(item)}
-                    >
-                      <MdDeleteOutline />
-                    </button>
-                  </td> </>) : (<><td><b>{item?.bookingid}</b></td>
-             <td><b>{ 'N/A'}</b></td>
-                  <td><b>{ 'N/A'}</b></td>
-                  <td><b>{ 'N/A'}</b></td>
-                  <td><b  >{ 'N/A'}</b></td>
-                  <td className="text-center"><b  >{'N/A'}</b></td>
-                  <td><b >{ 'N/A'}</b></td>
-                  <td>
-                    <button
-                      className="btn btn-outline btn-error"
-                      onClick={() => handleCancelReq(item)}
-                    >
-                      <MdDeleteOutline />
-                    </button>
-                  </td>  </>)}
-                
+                {item?.bookingInfo ? (
+                  <>
+                    <td>
+                      <b>{item?.bookingid}</b>
+                    </td>
+                    <td>
+                      <b>{item?.bookingInfo?.userid}</b>
+                    </td>
+                    <td>
+                      <b>{item?.bookingInfo?.transactionId}</b>
+                    </td>
+                    <td>
+                      <b>{item?.bookingInfo?.fromdate}</b>
+                    </td>
+                    <td>
+                      <b
+                        className={
+                          item?.bookingInfo?.status === 'booked'
+                            ? 'text-green-500'
+                            : 'text-red-500'
+                        }
+                      >
+                        {item?.bookingInfo?.status}
+                      </b>
+                    </td>
+                    <td className="text-center">
+                      <b
+                        className={
+                          item?.bookingInfo?.cancellationDeadline === 'Expired'
+                            ? 'text-red-500 '
+                            : 'text-black'
+                        }
+                      >
+                        {item.bookingInfo.cancellationDeadline}
+                      </b>
+                    </td>
+                    <td>
+                      <b
+                        className={
+                          item?.bookingInfo?.paymentStatus === 'received'
+                            ? 'text-green-500'
+                            : 'text-red-400'
+                        }
+                      >
+                        {item?.bookingInfo?.paymentStatus}
+                      </b>
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-outline btn-error"
+                        onClick={() => handleCancelReq(item)}
+                      >
+                        <MdDeleteOutline />
+                      </button>
+                    </td>{' '}
+                  </>
+                ) : (
+                  <>
+                    <td>
+                      <b>{item?.bookingid}</b>
+                    </td>
+                    <td>
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td>
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td>
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td>
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td className="text-center">
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td>
+                      <b>{'N/A'}</b>
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-outline btn-error"
+                        onClick={() => handleCancelReq(item)}
+                      >
+                        <MdDeleteOutline />
+                      </button>
+                    </td>{' '}
+                  </>
+                )}
               </tr>
             ))}
           </tbody>
@@ -1116,7 +1015,6 @@ export const CancellationReq = () => {
   );
 };
 
-
 // todo : Admin
 
 export function Admin() {
@@ -1125,26 +1023,21 @@ export function Admin() {
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate()
-  const {refetch} = useData(); 
-  const {user} = useAuth();  
+  const navigate = useNavigate();
+  const { refetch } = useData();
+  const { user } = useAuth();
 
-
-
-  //todo completed 
+  //todo completed
 
   useEffect(() => {
-
-    if(!user ){
-      return navigate('/login')
+    if (!user) {
+      return navigate('/login');
     }
     const fetchData = async () => {
       try {
         setloading(true);
 
         const res = await axiosSecure.get('/api/users/getallusers');
-
-        
 
         setadmins(res.data);
         setloading(false);
@@ -1153,12 +1046,9 @@ export function Admin() {
         seterror(error);
         if (error.response.status === 500) {
           setErrorMessage(error.response.data.message);
-        } 
-       else if (error.response.status === 400) {
+        } else if (error.response.status === 400) {
           setErrorMessage(error.response.data.message);
-        } 
-        
-        else if (error.response.status === 404) {
+        } else if (error.response.status === 404) {
           navigate('/not-found');
         } else {
           setErrorMessage('Something went wrong !!!');
@@ -1167,117 +1057,38 @@ export function Admin() {
       }
     };
     fetchData();
-  }, [axiosSecure , navigate , user]);
+  }, [axiosSecure, navigate, user]);
 
+  // todo completed
 
-
-
-  // todo completed 
-  // delete user 
-
-  // const handleAdmin = async(id)=>{
-
-  //   try {
-
-  //     setloading(true); 
-  //     const res = await axiosSecure.delete(`/api/users/delete-user/${id}`)
-  //     console.log(res.data); 
-  //     if(res.status === 201){
-  //       message.success(res.data.message)
-  //     }else{
-  //       message.error('Failed to user deleted ')
-  //     }
-  //     setloading(false); 
-  //   } catch (error) {
-  //     console.log(error); 
-  //     seterror(true); 
-  //     if (error.response.status === 401) {
-  //       setErrorMessage(error.response.data.message);
-  //     } else if (error.response.status === 404) {
-  //       navigate('/not-found');
-  //     }
-      
-  //     else if(error.response.status === 500) {
-  //       setErrorMessage(error.response.data.message)}
-
-  //     else {
-  //       setErrorMessage('Something went wrong !!!');
-  //     }
-
-  //     setloading(false); 
-  //   }
-
-  // }
-
-
-  // update admin acces 
-
-  // const handleAdminAccess = async(id)=>{
-
-  //   try {
-
-  //     setloading(true); 
-  //     const res = await axiosSecure.patch(`/api/users/admin-status/${id}`)
-  //     console.log(res.data); 
-  //     if(res.status === 201){
-  //       message.success(res.data.message)
-  //     }else{
-  //       message.error('Failed to update !!')
-  //     }
-  //     setloading(false); 
-
-  //   } catch (error) {
-  //     console.log(error); 
-  //     seterror(true); 
-  //     if (error.response.status === 401) {
-  //       setErrorMessage(error.response.data.message);
-  //     } else if (error.response.status === 404) {
-  //       navigate('/not-found');
-  //     }
-      
-  //     else if(error.response.status === 500) {
-  //       setErrorMessage(error.response.data.message)
-  //       }
-
-  //     else {
-  //       setErrorMessage('Something went wrong !!!');
-  //     }
-  //     setloading(false); 
-  //   }
-  // }
-
-
-  const handleAdmin = async (id)=>{
-
+  const handleAdmin = async (id) => {
     try {
-      setloading(true); 
-      const res = await axiosSecure.delete(`/api/users/delete-user/${id}`)
-      // console.log(res.data); 
-      if(res.status === 201){
-        message.success(res.data.message); 
-        const result = await refetch.admin(); 
-        setadmins(result); 
-      }else{
-        message.error('Users not found')
+      setloading(true);
+      const res = await axiosSecure.delete(`/api/users/delete-user/${id}`);
+      // console.log(res.data);
+      if (res.status === 201) {
+        message.success(res.data.message);
+        const result = await refetch.admin();
+        setadmins(result);
+      } else {
+        message.error('Users not found');
       }
-      setloading(false); 
+      setloading(false);
     } catch (error) {
-      console.log(error); 
-      seterror(true); 
-      if(error.response.status === 404){
-        navigate('/not-found')
-      }else if(error.response.status === 401){
-        message.error(error.response.data.message); 
-      }else if(error.response.status === 500){
-        setErrorMessage(error.response.data.message)
-      }else{
-        setErrorMessage('Something went wrong')
+      console.log(error);
+      seterror(true);
+      if (error.response.status === 404) {
+        navigate('/not-found');
+      } else if (error.response.status === 401) {
+        message.error(error.response.data.message);
+      } else if (error.response.status === 500) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Something went wrong');
       }
-      setloading(false); 
+      setloading(false);
     }
-
-  }
-
+  };
 
   if (loading) {
     return <Spinner />;
@@ -1286,8 +1097,6 @@ export function Admin() {
   if (error && errorMessage) {
     return <Error error={errorMessage} />;
   }
-
-
 
   if (admins.length === 0) {
     return (
@@ -1298,13 +1107,10 @@ export function Admin() {
     );
   }
 
-  // to maintain index number (id);
-
-  let indexer = 1; 
+  let indexer = 1;
 
   return (
     <>
-    {/* {JSON.stringify(users)} */}
       <Helmet>
         <title>Vacation Rentalsall | Admin </title>
       </Helmet>
@@ -1324,43 +1130,41 @@ export function Admin() {
             </thead>
 
             <tbody>
-        {loading ? (<Spinner />) : ( admins &&
+              {loading ? (
+                <Spinner />
+              ) : (
+                admins &&
                 admins.map((admin, index) => {
-                 
-                  if(admin.isAdmin){
+                  if (admin.isAdmin) {
                     return (
                       <tr key={index}>
                         <td>{indexer++}</td>
-                        <td>{ 
-                        admin.name}</td>
+                        <td>{admin.name}</td>
                         <td>{admin.email}</td>
-                        <td ><b className={admin.isAdmin ? 'text-red-400' : 'text-green-400'}>{admin.isAdmin && <RiAdminFill className="text-xl"/>
-                        
-                        
-                
-                        
-                        
-                        }</b></td>
                         <td>
-  
-                          <button className="btn btn-outline btn-error" onClick={()=> handleAdmin(admin._id)}>
-  
-                          <MdDeleteOutline /> 
+                          <b
+                            className={
+                              admin.isAdmin ? 'text-red-400' : 'text-green-400'
+                            }
+                          >
+                            {admin.isAdmin && (
+                              <RiAdminFill className="text-xl" />
+                            )}
+                          </b>
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-outline btn-error"
+                            onClick={() => handleAdmin(admin._id)}
+                          >
+                            <MdDeleteOutline />
                           </button>
-  
-  
-  
                         </td>
                       </tr>
                     );
                   }
-
-
-
-
-                }))  }
-
-             
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -1369,169 +1173,148 @@ export function Admin() {
   );
 }
 
+//todo : reported bookings
 
-//todo : reported bookings 
-
-export function ReportedBooking(){
-
-
+export function ReportedBooking() {
   const [reports, setreports] = useState([]);
   const [loading, setloading] = useState(true);
   const [error, seterror] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate(); 
-  const {refetch} = useData(); 
-  const {user} = useAuth(); 
+  const navigate = useNavigate();
+  const { refetch } = useData();
+  const { user } = useAuth();
 
-  useEffect(()=>{
-
-    if(!user ){
-      return navigate('/login')
+  useEffect(() => {
+    if (!user) {
+      return navigate('/login');
     }
 
-    const fetchData = async ()=>{
-
+    const fetchData = async () => {
       try {
+        setloading(true);
 
-        setloading(true); 
-
-        const res = await axiosSecure.get('/api/report/get-reports')
-        // console.log('get reports ' , res.data); 
-        setreports(res.data); 
-        setloading(false); 
-        
+        const res = await axiosSecure.get('/api/report/get-reports');
+        setreports(res.data);
+        setloading(false);
       } catch (error) {
-        console.log(error); 
-        seterror(true)
-        error.response.status === 500 ? setErrorMessage(error.response.data.message)  : error.response.status === 404 ? navigate('/not-found') : setErrorMessage('Something went wrong')
-        setloading(false); 
+        console.log(error);
+        seterror(true);
+        error.response.status === 500
+          ? setErrorMessage(error.response.data.message)
+          : error.response.status === 404
+          ? navigate('/not-found')
+          : setErrorMessage('Something went wrong');
+        setloading(false);
       }
-      
-    }
-    fetchData(); 
+    };
+    fetchData();
+  }, [axiosSecure, navigate, user]);
 
-  } , [axiosSecure , navigate , user])
-
-  
-  
-  
-  
-  const handleReport = async(id)=>{
-
-    // console.log('reported id ' , id); 
-
-   
+  const handleReport = async (id) => {
     try {
       setloading(true);
       const res = await axiosSecure.get(`/api/report/delete-reports/${id}`);
-      // console.log(res.data); 
       if (res.status === 201) {
         message.success(res.data.message);
-        const result = await refetch.reported(); 
-        setreports(result); 
+        const result = await refetch.reported();
+        setreports(result);
       } else {
         message.error('Something phishing');
       }
     } catch (error) {
-      console.log(error); 
-      seterror(true); 
-      error.response.status === 500 ? setErrorMessage(error.response.data.message) : error.response.status === 404 ? navigate('/not-found') : error.response.status === 701 ? setErrorMessage(error.response.data.message) : error.response.status === 702 ? setErrorMessage(error.response.data.message) : setErrorMessage('Something went wrong !!!');
+      console.log(error);
+      seterror(true);
+      error.response.status === 500
+        ? setErrorMessage(error.response.data.message)
+        : error.response.status === 404
+        ? navigate('/not-found')
+        : error.response.status === 701
+        ? setErrorMessage(error.response.data.message)
+        : error.response.status === 702
+        ? setErrorMessage(error.response.data.message)
+        : setErrorMessage('Something went wrong !!!');
     } finally {
-      setloading(false); // Ensure loading state is reset after the try/catch block
+      setloading(false);
     }
+  };
+
+  if (loading) {
+    return <Spinner />;
   }
 
-
-  if(loading){
-    return <Spinner />
+  if (error && errorMessage) {
+    return <Error error={errorMessage} />;
   }
 
-  if(error && errorMessage){
-    return <Error error={errorMessage} />
-  }
-
-  if(reports.length === 0){
-    return(
+  if (reports.length === 0) {
+    return (
       <>
-      <div className="text-center mt-5">
-        <h2>No Reported Bookings found</h2>
-        <p>There are currently no  reported bookings in the system !!!</p>
-      </div>
-      
+        <div className="text-center mt-5">
+          <h2>No Reported Bookings found</h2>
+          <p>There are currently no reported bookings in the system !!!</p>
+        </div>
       </>
-    )
+    );
   }
 
   return (
-
     <>
-
-<Helmet>
+      <Helmet>
         <title>Vacation Rentalsall | Admin </title>
       </Helmet>
-    {loading ? <Spinner /> : 
-    
-    ( <>
-    
-    <table className="table table-bordered table-dark">
-          <thead className="bs">
-            <tr>
-              <th>Reported Id</th>
-              <th>Booking Id</th>
-              <th>Customer</th> 
-              <th>Room</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reports && reports.map((report, index) => {
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <table className="table table-bordered table-dark">
+            <thead className="bs">
+              <tr>
+                <th>Reported Id</th>
+                <th>Booking Id</th>
+                <th>Customer</th>
+                <th>Room</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reports &&
+                reports.map((report, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{report._id}</td>
+                      <td>{report.booking?._id}</td>
+                      <td>{report.booking?.email}</td>
+                      <td>{report.booking?.room}</td>
 
-              // console.log('reporsts value ' , report)
+                      <td>
+                        <b
+                          className={
+                            report.booking.status === 'booked'
+                              ? 'text-green-500'
+                              : 'text-red-500'
+                          }
+                        >
+                          {report.booking?.status}
+                        </b>
+                      </td>
 
-              return (
-                <tr key={index}>
-                  <td>{report._id}</td>
-                  <td>{report.booking?._id}</td>
-                  <td>{report.booking?.email}</td>
-                  <td>{report.booking?.room}</td>
-             
-                  <td>
-                    <b
-                      className={
-                        report.booking.status === 'booked'
-                          ? 'text-green-500'
-                          : 'text-red-500'
-                      }
-                    >
-                      {report.booking?.status}
-                    </b>
-                  </td>
-                  
-                  <td>
-                    <button
-                      className="btn btn-outline btn-error"
-                      onClick={() => handleReport(report._id)}
-                    >
-                      <MdDeleteOutline />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-    
-    
-     </>
-  
-  
-  )
-    
-    
-    }
-    
+                      <td>
+                        <button
+                          className="btn btn-outline btn-error"
+                          onClick={() => handleReport(report._id)}
+                        >
+                          <MdDeleteOutline />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </>
+      )}
     </>
-  )
+  );
 }
