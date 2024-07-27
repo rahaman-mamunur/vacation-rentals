@@ -1,0 +1,110 @@
+const hotels = [
+    {
+        id: 1,
+        name: "Hotel Sunrise",
+        location: "Mumbai, India",
+        rooms: [
+            {
+                roomId: 101,
+                type: "Deluxe",
+                pricePerNight: 5000,
+                amenities: ["WiFi", "Air Conditioning", "Breakfast"]
+            },
+            {
+                roomId: 102,
+                type: "Standard",
+                pricePerNight: 3000,
+                amenities: ["WiFi", "Air Conditioning"]
+            }
+        ],
+        services: [
+            {
+                serviceId: 1,
+                serviceName: "Room Service",
+                available: true
+            },
+            {
+                serviceId: 2,
+                serviceName: "Laundry",
+                available: false
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: "Hotel Blue Lagoon",
+        location: "Goa, India",
+        rooms: [
+            {
+                roomId: 201,
+                type: "Suite",
+                pricePerNight: 8000,
+                amenities: ["WiFi", "Air Conditioning", "Breakfast", "Sea View"]
+            },
+            {
+                roomId: 202,
+                type: "Cottage",
+                pricePerNight: 6000,
+                amenities: ["WiFi", "Air Conditioning", "Breakfast"]
+            }
+        ],
+        services: [
+            {
+                serviceId: 1,
+                serviceName: "Room Service",
+                available: true
+            },
+            {
+                serviceId: 2,
+                serviceName: "Spa",
+                available: true
+            },
+            {
+                serviceId: 3,
+                serviceName: "Gym",
+                available: false
+            }
+        ]
+    },
+    {
+        id: 3,
+        name: "Mountain View Resort",
+        location: "Manali, India",
+        rooms: [
+            {
+                roomId: 301,
+                type: "Premium",
+                pricePerNight: 7000,
+                amenities: ["WiFi", "Air Conditioning", "Mountain View", "Breakfast"]
+            },
+            {
+                roomId: 302,
+                type: "Economy",
+                pricePerNight: 4000,
+                amenities: ["WiFi", "Air Conditioning"]
+            }
+        ],
+        services: [
+            {
+                serviceId: 1,
+                serviceName: "Room Service",
+                available: true
+            },
+            {
+                serviceId: 2,
+                serviceName: "Tour Guide",
+                available: true
+            }
+        ]
+    }
+];
+
+// Sabhi roomId ko ek array mein collect karna
+const roomIds = hotels.map(hotel => 
+    hotel.rooms.map(room => room.roomId)
+);
+
+// Nested array ko flat karna
+const flatRoomIds = roomIds.flat();
+
+console.log(flatRoomIds);

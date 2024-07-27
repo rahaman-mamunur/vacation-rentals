@@ -1,0 +1,50 @@
+way 1 : jodi component  ke render korte chai tahole 
+
+const [errorMessage, setErrorMessage] = useState(null);
+
+
+      if(error.response.status === 400 && error.response.data.message === "Invalid check-in date format" ) {
+        setErrorMessage(error.response.data.message);
+      }
+      
+      
+      else if(error.response.status === 403 && error.response.data.message === "Booking not found" ){
+        return <Error error={error.response.data.message} />
+      }
+
+      
+      
+      else if(error.response.status === 404){
+        navigate('/not-found')
+      }
+      else if(error.response.status === 500 ){
+        return <Error error={error.response.data.message} />
+      }
+      
+      else{
+        return <Error error={"Something went wrong"} />
+      }
+
+      setloading(false); 
+
+
+{errorMessage && <Error error={errorMessage} />}
+
+
+
+
+way 2 .  component render hbe na 
+
+
+     if([400 , 409 , 500].includes(error.response.status)){
+
+        message.error(error.response.data.message)
+      }else if( error.response.status){
+        navigate('/not-found')
+      }
+      else{
+        message.error('Something went wrong')
+      }
+
+
+

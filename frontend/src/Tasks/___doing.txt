@@ -1,0 +1,9 @@
+1 >  firebase setup 
+
+2 > loader gif 
+
+3 > error gif 
+
+4 > authetication gif
+
+5 > single day  handle filter function 

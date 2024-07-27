@@ -1,0 +1,12 @@
+pages --> 
+
+
+1. bookingScreen.jsx -->  completed
+
+2. Sign Up ---<  completed 
+
+3. Homescreenpage ----> completed 
+
+4. Login Page --> completed 
+
+5 . 

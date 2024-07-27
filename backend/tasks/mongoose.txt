@@ -1,0 +1,20 @@
+Mongoose mein jab aap `ref` ka upayog karte hain aur kisi dusre model se reference link karte hain, toh aapko `ObjectId` dena padta hai kyunki MongoDB mein har document ka ek unique identifier hota hai, jo ki `ObjectId` ke roop mein hota hai. `ObjectId` ek 12-byte BSON type hai jo document ko uniquely identify karta hai.
+
+Jab aap kisi field ko define karte hain jaise ki:
+
+```javascript
+user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+```
+
+Yahaan, `type` ke roop mein `mongoose.Schema.Types.ObjectId` ka upayog karke aap ye specify kar rahe hain ki `user` field mein jo value hogi wo ek `ObjectId` honi chahiye. Aur `ref` ke saath 'User' specify karke aap ye bata rahe hain ki ye `ObjectId` `User` model ke documents se related hai.
+
+
+user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+
+
+
+Iska matlab hai ki jab bhi aap `user` field mein koi value save karenge, toh wo `User` collection ke kisi document ke `ObjectId` se match honi chahiye. Is tarah se Mongoose aapko relational data ko manage karne ki suvidha deta hai, jaise ki SQL databases mein foreign keys ka upayog hota hai.
+
+`ObjectId` ka upayog karne se aapko ye fayda hota hai ki aap efficiently related documents ko query kar sakte hain aur `populate` method ka upayog karke related data ko retrieve kar sakte hain. Isse aapke application ke data structure ko maintain karne mein aasani hoti hai aur data consistency bhi bani rehti hai.
+
+Agar aapko aur kuch jaankari chahiye ya koi aur prashna hai, toh mujhse pooch sakte hain.

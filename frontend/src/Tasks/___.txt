@@ -1,0 +1,164 @@
+1. fetch() =>
+
+2. auth ..
+
+
+
+
+const a = new Date(); 
+
+console.log(a); 
+
+
+const b = new Date('2024-05-21')
+console.log(b); 
+
+const currentDate = new Date(); 
+console.log(currentDate); 
+
+
+const dater = '18-05-2024'
+const updatedate = dater.split('-')
+console.log(updatedate); 
+
+const fromdate = `${updatedate[2]}-${updatedate[1]}-${updatedate[0]}`
+console.log(fromdate)
+
+const createBooking  = new Date(fromdate); 
+console.log(createBooking); 
+
+
+const temp = createBooking ; 
+console.log(temp); 
+
+
+const cudate = currentDate.getDate(); 
+console.log(typeof(cudate) , cudate)
+
+const bdate = createBooking.getDate(); 
+console.log(typeof(bdate) , bdate)
+
+const diff = bdate-cudate; 
+console.log(typeof(diff) , diff)
+
+
+
+
+if(cudate < bdate){
+    console.log('cancel')
+}else{
+    console.log('no cancel')
+}
+
+
+
+const currentTime = new Date()
+console.log(currentTime); 
+
+const cTime = currentTime.getTime(); 
+console.log(cTime);  
+
+const createdTime = new Date('2024-05-18T08:35:38.344+00:00')
+
+const crtime = createdTime.getTime();
+console.log(cTime)
+
+const dif  = crtime - cTime 
+console.log((dif/60000).toFixed());  
+
+
+if(dif > 2){
+    console.log('cancel')
+}else{
+    console.log('no cancel')
+}
+
+
+
+
+///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+
+console.log(new Date())
+
+const ekhon = new Date().getTime(); 
+console.log(ekhon); 
+
+const tokhon = new Date('2024-05-18T09:06:00.344+00:00').getTime(); 
+console.log(tokhon); 
+
+const ok = (ekhon - (tokhon+2))/60000
+console.log(ok): 
+
+
+if(ok <= 2){
+    console.log('cancel')
+}else{
+    console.log('no ')
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+ console.log(2+2); 
+
+const currentTime = new Date();
+console.log(currentTime); 
+
+const currentTimeUTC = currentTime.getTime() + currentTime.getTimezoneOffset() * 60000; // Convert current time to UTC
+
+console.log(currentTimeUTC): 
+
+console.log(2+3)
+
+
+
+
+
+
+
+
+
+
+console.log(2+3) 
+
+const tz = new Date().getTimezoneOffset(); 
+console.log(tz); 
+
+const name = Intl.DateTimeFormat().resolvedOptions().timeZone; 
+
+console.log(name); 
+
+const locatime = new Date().toLocaleTimeString(); 
+console.log(typeof(locatime) , locatime)
+
+
+
+
+
+
+
+
+
+      {/* Center "Bookings" link without it growing */}
+      <li className="mr-4 ">
+        <Link
+          to="/home/bookings"
+          className="btn btn-outline flex items-center btn-accent "
+          style={{ margin: 0, padding: '0.5rem 1rem' }} 
+        >
+          <TbBrandBooking className="icon text-slate-300 text-2xl"/>
+          Bookings
+        </Link>
+      </li>
